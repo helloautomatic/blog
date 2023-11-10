@@ -67,6 +67,49 @@ int main()
 
 3、指向字符串的指针；
 
+code1
+
+```
+char *str1 = "abcdef";  // 不合法
+char str[] = "abcdef";  // 合法
+const char str* = "abcdef";  // 合法
+```
+
+code2
+```
+char str2[] = "abc";
+char *str1 = str2;  // 合法
+// str1[5] = ??
+str1[4] = 'd';  // 危险的行为
+```
+
+指针变量作为函数形参和数组作为函数形参
+
+code3
+```
+void func(int arr[50]);  // 这里的50是无效的
+
+```
+上述代码其实等价于
+```
+void func(int arr[]);
+```
+
+在二维数组中，数组的第一维的数字是无效的，会被编译器忽略，比如
+```
+void func(int arr1[2][1]);
+```
+void func(int arr1[2][1]); 中的 2 并不会对编译产生影响。这个声明实际上等同于 void func(int arr1[][1]); 或者 void func(int (*arr1)[1]);。
+
+code4
+```
+char str[] = "abc";
+// sizeof(str) = ??
+```
+在code4这个例子中，char str[] = "abc"; 定义了一个字符数组 str，并初始化为字符串 "abc"。由于初始化时指定了字符串内容，编译器会自动根据字符串的长度为数组分配足够的空间。
+因此，sizeof(str) 的值将是包括字符串末尾的空字符在内的数组的总大小。对于 "abc"，它的大小是 4（'a', 'b', 'c'，以及末尾的空字符 '\0'）。所以，sizeof(str) 将是 4。
+
+
 4、指向int，double等的指针；
 
 5、指向指针的指针
