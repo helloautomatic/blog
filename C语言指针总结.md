@@ -68,7 +68,6 @@ int main()
 3、指向字符串的指针；
 
 code1
-
 ```
 char *str1 = "abcdef";  // 不合法
 char str[] = "abcdef";  // 合法
@@ -149,26 +148,141 @@ int **integers = pointers;
 ```
 
 8、一个数组，里面存放的都是函数指针
+```
+#include <stdio.h>
 
+// 假设有两个函数
+void func1() {
+    printf("这是函数1\n");
+}
 
-10、有多个返回值的函数；
+void func2() {
+    printf("这是函数2\n");
+}
 
-11、返回值为指针的函数；
+int main() {
+    // 定义函数指针数组，存放两个函数的地址
+    void (*functionPointers[2])() = {func1, func2};
 
-12、指针型的数组；
+    // 调用数组中的第一个函数
+    functionPointers[0]();
+
+    // 调用数组中的第二个函数
+    functionPointers[1]();
+
+    return 0;
+}
+```
+
+**11、返回值为指针的函数；**
+
+这个需要特别注意。当一个函数返回指针的时候，首先要确定该指针指向的内容是有效的。
+比如说，有如下代码
+```
+int * func(void)
+{
+	int a = 0;
+	int *p = NULL;
+	p = & a;
+	return p;
+}
+
+int *p = func();
+*p = 9;
+```
+在上述代码中，func中的变量a在函数调用结束后就无效了，但是却返回了他的地址。
+然而，在函数外部使用*p=9对函数地址进行了内存改写操作，这样是错误的。会导致意想不到的结果，进而导致程序崩溃。究其原因就是，
+
+没搞明白在C语言中，哪些变量是放在栈中，哪些变量是放在堆中，还有变量的生存周期是怎样的。
+
+这种就叫做悬挂指针： 在 func 函数中，你返回了一个指向局部变量的指针。一旦函数执行完毕，a 的生命周期结束，指针 p 就变成了悬挂指针（dangling pointer），指向的内存区域可能被其他程序使用，导致未定义的行为。
+
+这只是一个简单的例子，很多人觉得
+
+12、悬挂指针和野指针有什么区别？
+
+悬挂指针（Dangling Pointer）： 指的是指针仍然指向之前分配的内存地址，但这部分内存已经被释放或超出了其作用域。这样的指针可能导致未定义的行为，因为你访问的是无效的内存。悬挂指针可以是野指针的一种情况，但不限于野指针。
+
+野指针（Wild Pointer）： 指的是指针变量的值是一个未知的地址，它没有被初始化，或者在释放后没有被置为 NULL。野指针可能指向任意位置的内存，包括一些未分配的内存区域。野指针是一种常见的编程错误，容易导致程序崩溃或产生不可预测的结果。
 
 13、“void”型的指针；
+```
+#include <stdio.h>
 
-14、“NULL”和void指针；
+// 一个使用void*的通用打印函数
+void printValue(void *ptr, char type) {
+    switch(type) {
+        case 'i':
+            printf("整数值：%d\n", *((int*)ptr));
+            break;
+        case 'f':
+            printf("浮点数值：%f\n", *((float*)ptr));
+            break;
+        case 'c':
+            printf("字符值：%c\n", *((char*)ptr));
+            break;
+        default:
+            printf("未知类型\n");
+    }
+}
 
-15、单级间址，二级间址，多级间址；
+int main() {
+    int intValue = 42;
+    float floatValue = 3.14;
+    char charValue = 'A';
+
+    // 使用void*指针传递不同类型的数据
+    printValue(&intValue, 'i');
+    printValue(&floatValue, 'f');
+    printValue(&charValue, 'c');
+
+    return 0;
+}
+
+```
+
+14、NULL，void*，数值0，三者有什么区别和联系？；
+
+在很多系统中，NULL 被定义为数值 0 或者某种表示空指针的特殊值。因此，NULL 和数值 0 在指针上通常是等效的。
+void* 通常用于接收或传递未知类型的指针，而 NULL 或者数值 0 通常用于表示空指针
 
 16、数组作为函数的参数，指向一维数组的指针，那这个数组应是二维的；
 
-17、对char**p”的理解；
-
 18、maloc，calloc，free，realloc的使用；
+
+malloc（Memory Allocation）：
+
+函数签名：void* malloc(size_t size);
+用于分配指定大小的内存块。
+返回一个指向分配内存的指针。
+例子：int *arr = (int*)malloc(5 * sizeof(int));
+calloc（Contiguous Allocation）：
+
+函数签名：void* calloc(size_t num, size_t size);
+用于分配 num 个大小为 size 字节的连续内存块，并将每个字节初始化为0。
+返回一个指向分配内存的指针。
+例子：int *arr = (int*)calloc(5, sizeof(int));
+free：
+
+函数签名：void free(void *ptr);
+用于释放之前由 malloc 或 calloc 分配的内存。
+例子：free(arr);
+realloc（Reallocate）：
+
+函数签名：void* realloc(void *ptr, size_t size);
+用于重新分配之前由 malloc 或 calloc 分配的内存块的大小。
+返回一个指向新分配内存的指针。原始指针可能被释放或移动到新的位置。
+例子：int *newArr = (int*)realloc(arr, 10 * sizeof(int));
 
 19、强制类型转换分为显式转换和隐式转换；
 
+
 20、指向结构体变量的指针（结构体指针）；
+
+21、表达式的值
+
+首先需要明确的是，什么叫做表达式？
+
+22、在C语言中\sqrt{4}和2.0真的相等嘛？
+
+
