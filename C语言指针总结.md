@@ -274,15 +274,30 @@ realloc（Reallocate）：
 返回一个指向新分配内存的指针。原始指针可能被释放或移动到新的位置。
 例子：int *newArr = (int*)realloc(arr, 10 * sizeof(int));
 
-19、强制类型转换分为显式转换和隐式转换；
-
-
 20、指向结构体变量的指针（结构体指针）；
 
-21、表达式的值
+```
+struct S1 {
+    int a;
+    int b;
+    int c[];  // 柔性数组
+};
 
-首先需要明确的是，什么叫做表达式？
+struct S2 {
+    int a;
+    int b;
+    int *c;
+};
+```
 
-22、在C语言中\sqrt{4}和2.0真的相等嘛？
+在上述代码中
+
+sizeof(S1) = sizeof(int a) + sizeof(int b) = 4 + 4 = 8;
+
+sizeof(S2) = sizeof(int a) + sizeof(int b) + sizeof(int*c) = 4 + 4 + 4 = 12;
+
+
+
+
 
 
