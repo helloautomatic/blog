@@ -296,7 +296,36 @@ sizeof(S1) = sizeof(int a) + sizeof(int b) = 4 + 4 = 8;
 
 sizeof(S2) = sizeof(int a) + sizeof(int b) + sizeof(int*c) = 4 + 4 + 4 = 12;
 
+### 结构体中的强制类型转换需要注意什么？
 
+```
+struct S1 {
+    int a;
+    int b;
+};
+
+struct S2 {
+    int a;
+    int b;
+    int c;
+};
+
+struct S1 s1;
+s1.a = 1;
+s1.b = 2;
+
+struct S2 s2;
+s2.a = 3;
+s2.b = 4;
+s2.c = 5;
+
+struct S1 *ps1 = &s1;
+struct S2 *ps2 = &s2;
+
+((S1*)ps2)->a;
+((S2*)ps1)->c = 8;  // 可能会发生意向不到的错误 
+
+```
 
 
 
