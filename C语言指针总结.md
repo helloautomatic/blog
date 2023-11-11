@@ -112,15 +112,44 @@ char str[] = "abc";
 
 4、指向int，double等的指针；
 
+指向int和double的指针变量的大小是固定的，并不会因为所指向的内存大小不一样而改变。
+通常，在32bit计算机中，指针变量的大小就是4个字节。64bit计算机中，就是8个字节。
+```
+int *a;
+double *b;
+```
+a ++和b++，指针移动的字节数量不一样。a移动的数量是sizeof(int)，b移动的数量是sizeof(double)
+
 5、指向指针的指针
+
+指向指针的指针，其实就是声明一个指针，这个指针指向的空间中存放的是个数值，该数值仍然是指针。
 
 6、指向函数的指针；
 
-7、一维数组做函数的参数；
+```
+void (*functionPointer)(int);
+```
+(*functionPointer)这里的一对中括号不能省略
 
-8、二维数组做函数的参数；
 
-9、三维数组做函数的参数；
+7、一个数组，里面存放的都是指针
+```
+int num1 = 10, num2 = 20, num3 = 30, num4 = 40;
+int *integers[] = {&num1, &num2, &num3, &num4};
+```
+
+int *integers[]和int **integers的区别,int *integers[] 是一个指针数组，每个元素都是一个整数指针，而 int **integers 是一个指向整数指针的指针。
+
+```
+int num1 = 10, num2 = 20, num3 = 30, num4 = 40;
+int *ptr1 = &num1, *ptr2 = &num2, *ptr3 = &num3, *ptr4 = &num4;
+
+int *pointers[] = {ptr1, ptr2, ptr3, ptr4};
+int **integers = pointers;
+```
+
+8、一个数组，里面存放的都是函数指针
+
 
 10、有多个返回值的函数；
 
