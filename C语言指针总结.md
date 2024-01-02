@@ -298,6 +298,47 @@ struct S2 *ps2 = &s2;
 
 ```
 
+### 字符串、字符数组、字符指针
+```
+char *str = "Hello, World!";  // 错误
+```
+
+```
+char str[] = "Hello, World!";  // 正确
+str++;  // 错误，因为str是常量，不可改变
+```
+
+```
+const char *str = "Hello, World!";  // 正确，但是不能通过str去修改其所指向的内容
+str ++;  // 正确
+```
+
+字符数组和字符串常量的区别
+
+```
+#include <stdio.h>
+
+int main() {
+    // 字符数组的声明和初始化
+    char mutableStr[] = "Hello";
+    
+    // 字符串常量的声明
+    const char *constantStr = "World";
+
+    // 修改字符数组中的字符
+    mutableStr[0] = 'M';
+
+    // 试图修改字符串常量（这是不允许的）
+    // constantStr[0] = 'A';  // 这行代码会导致编译错误
+
+    // 打印修改后的字符数组和字符串常量
+    printf("Mutable String: %s\n", mutableStr);
+    printf("Constant String: %s\n", constantStr);
+
+    return 0;
+}
+
+```
 
 
 
