@@ -74,16 +74,17 @@ ar -t liball.a
 g++ main.cpp -o main.out -L./ -lall
 ./main.out
 ```
+*.a文件是静态库文件,但是在linux中文件拓展名通常是为了便于识别文件类型,它是文件名字的一部分,系统并不根据其拓展名来识别文件类型.但是在linux中文件是类型的,比如说,text类型,ELF类型等等,也会有相应的编码格式.
 
 ### 动态库的制作方法
 ```
 g++ -fPIC -c lib1.cpp lib2.cpp lib3.cpp
 g++ -shared -o liball.so lib1.o lib2.o lib3.o
-g++ main.cpp -o main.out -L./ -lall
+g++ main.cpp -o main.out -L./ -I./ -lall
 export LD_LIBRARY_PATH="./"
 ./main.out
 ```
-
+PIC: position independent code
 
 ## 编译指令总结
 
