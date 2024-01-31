@@ -75,6 +75,16 @@ g++ main.cpp -o main.out -L./ -lall
 ./main.out
 ```
 
+### 动态库的制作方法
+```
+g++ -fPIC -c lib1.cpp lib2.cpp lib3.cpp
+g++ -shared -o liball.so lib1.o lib2.o lib3.o
+g++ main.cpp -o main.out -L./ -lall
+export LD_LIBRARY_PATH="./"
+./main.out
+```
+
+
 ## 编译指令总结
 
 gcc/g++编译命令
